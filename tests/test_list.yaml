@@ -1,5 +1,5 @@
 common:
-  - test_test.SuccessTest
+  - fake_test.SuccessTest
 juniper: []
 cisco: []
 arista:

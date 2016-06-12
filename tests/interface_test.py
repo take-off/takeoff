@@ -26,7 +26,7 @@ class interfaceTest:
                 self.down.append(downinterface)
             if 'up' in i:
                 upinterface = i.split()[0]
-                self.up.append(upinterface)        
+                self.up.append(upinterface)
         return len(self.down) , self.down, len(self.up), self.up
 test=  interfaceTest(cmd_out,platform)
-print test.pasre_interfaces(cmd_out,platform)
+print test.parse_interfaces(cmd_out,platform)
