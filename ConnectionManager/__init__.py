@@ -150,9 +150,9 @@ class connection:
         nc_open=False
         ssh_open=False
         if netconf and self.nc is None:
-            nc_open = self.__nc_connect():
+            nc_open = self.__nc_connect()
         if ssh and self.ssh is None:
-            ssh_open = self.__ssh_connect():
+            ssh_open = self.__ssh_connect()
         if not (ssh_open or nc_open):
             return False
         return True
