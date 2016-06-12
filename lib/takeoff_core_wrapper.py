@@ -53,7 +53,7 @@ class TakeOffCore(object):
 
     # Then platform
     if y.get(self.platform):
-      test_list.extend(y[platform])
+      test_list.extend(y[self.platform])
 
     return test_list
 
@@ -93,11 +93,14 @@ class TakeOffCore(object):
           self.hostname, self.platform))
 
     # Then run the test, which will return True or False
+
     if test_obj.test():
       print "---- TEST SUCCESS --- "
       for line in test_obj.output:
         print line
     else:
       print "---- TEST FAILED ----"
+      for line in test_obj.output:
+        print "  %s" % line
       for line in test_obj.error:
         print "  %s" % line
