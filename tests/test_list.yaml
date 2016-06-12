@@ -1,0 +1,5 @@
+common:
+  - sample_test.FooTest
+juniper: []
+cisco: []
+arista: []
