@@ -22,7 +22,7 @@ class AristaBGPConnTest(TakeOffTest):
     neighbor_line_re = re.compile('^(\d+\.\d+\.\d+\.\d+).*')
 
     neighbor_lines = []
-    for line in res:
+    for line in res['results'][0].split('\n'):
       if neighbor_line_re.match(line):
         neighbor_lines.append(line)
 
@@ -56,9 +56,3 @@ class AristaBGPConnTest(TakeOffTest):
     #  #print nei, temp, nei_name
     #  #print type(nei), type(temp), type(nei_name)
     #  nei_fun(nei, nei_name)
-
-
-
-
-
-
