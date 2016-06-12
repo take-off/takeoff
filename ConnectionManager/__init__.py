@@ -70,6 +70,9 @@ class connection:
             )
 
     def cli(self,cmd):
+        self.__errors = list()
+        self.__results = list()
+
         if self.debug: self.logger.debug("cli({})".format(type(cmd)))
         if self.ssh is None:
             try:
@@ -105,6 +108,9 @@ class connection:
             self.__cli_cmd(cmd)
 
     def cli_batch(self, cmds):
+        self.__errors = list()
+        self.__results = list()
+
         if self.debug:
             self.logger.info("Invoking shell for multiple commands")
         try:
@@ -179,6 +185,9 @@ class connection:
         return True
 
     def rpc(self, xmlrpc):
+        self.__errors = list()
+        self.__results = list()
+
         if self.nc is None: self.open()
         if type(xmlrpc) is str:
             self.__rpc(xmlrpc)
