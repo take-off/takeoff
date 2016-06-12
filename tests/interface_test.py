@@ -1,32 +1,39 @@
-#Test case for Interface UP/down
-
-cmd_out = """R1#sho interfaces description
-Interface                      Status         Protocol Description
-Fa0/0                          up             up
-Fa0/1                          down     down
-Se1/0                          admin down     down
-Se1/1                          up             up
-Se1/2                          admin down     down
-Se1/3                          admin down     down"""
+from takeoff_test import TakeOffTest
 
 
-platform = 'cisco'
+class InterfaceTest(TakeOffTest):
 
-class interfaceTest:
-    def __init__(self,cmd_out, platform):
-        self.interfaceline = cmd_out
-        self.platform =  platform
-        self.down = list()
-        self.up = list()
-    def pasre_interfaces(self, cmd_out, platform):
-        self.interfaceline = cmd_out.splitlines()
-        for i in self.interfaceline:
-            if 'admin down' in i  or 'down' in i:
-                downinterface = i.split()[0]
-                self.down.append(downinterface)
-            if 'up' in i:
-                upinterface = i.split()[0]
-                self.up.append(upinterface)
-        return len(self.down) , self.down, len(self.up), self.up
-test=  interfaceTest(cmd_out,platform)
-print test.parse_interfaces(cmd_out,platform)
+  def __init__(self, connection_object, hostname, platform):
+
+    super(InterfaceTest, self).__init__(connection_object=connection_object,
+                                           hostname=hostname,
+                                          platform=platform)
+
+  def test(self):
+
+    res = connection_object.cli('show inter description')
+  def pasre_interfaces(cmd_out, platform):
+    interfaceline = cmd_out
+    platform =  platform
+    down = list()
+    up = list()      
+    interfaceline = cmd_out.splitlines()
+    for i in interfaceline:
+        if 'admin down' in i  or 'down' in i:
+            downinterface = i.split()[0]
+            down.append(downinterface)
+        if 'up' in i:
+            upinterface = i.split()[0]
+            up.append(upinterface) 
+    # Then test the interfaces
+    self.interface_fun(down, up)
+
+  if len(self.error) == 0:
+    self._handle_success()
+
+
+  def interface_fun(down, up):
+    if down is not None:
+      self.output.append(" %s interface are DOWN, %s DOWN interfaes" % (len(down), down))
+    else:
+      self.error.append(' %s interfaces are UP, UP interfaces %s' % (len(up), up))
