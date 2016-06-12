@@ -17,7 +17,7 @@ example:
 
   if conn.open():
      res = conn.cli("show version")
-     if 'error' in res:
+     if 'errors' in res:
          pass # there were errors... handle?
      else:
          for result in res['results']:
