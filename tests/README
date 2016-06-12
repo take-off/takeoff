@@ -11,13 +11,18 @@ Class FooTest(TakeOffTest):
   self.debug = list() element. If desired, output verbose output by
               appending text lines to this attribute.
 
-  Wrapper will call each class's test() method, which will run
-  test, populate attributes, and then return True or False.
+  Calling code will initiate the object, passing in a connection
+  object, the hostname, and platform string.
+  It will then call the object's test() method (which takes no args).
+
+  test() method is expected to set self.status to True or False, and return
+  the same value.
   """
-  def __init__(connection_object):
+  def __init__(connection_object, hostname, platform):
 
-    super(TakeOffTest, self).__init__(connection_object)
-
+    super(TakeOffTest, self).__init__(connection_object=connection_object,
+                                      hostname=hostname,
+                                      platform=platform)
   def test():
 
     # Run arbitrary tests
@@ -28,9 +33,9 @@ Class FooTest(TakeOffTest):
       self.output.append("Found X interfaces, all good!")
       self.output.append("Some more useful info here")
       self.status = True
-      return True
-    if (<< Test failed >>):
+    elif (<< Test failed >>):
       self.error.append("Interface X down.")
       self.error.append("interface Y down.")
       self.status = False
-      return False
+
+    return self.status
