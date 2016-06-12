@@ -2,5 +2,6 @@ common:
   - fake_test.SuccessTest
 juniper: []
 cisco: []
-arista:
+arista: []
+fake:
   - arista_bgp_conn.AristaBGPConnTest
