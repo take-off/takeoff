@@ -145,14 +145,16 @@ class connection:
           return False
         return True
 
-    def open(self,netconf=True,ssh=True):
+    def open(self,netconf=False,ssh=True):
         # attempt to open both netconf and ssh..
+        nc_open=False
+        ssh_open=False
         if netconf and self.nc is None:
-            if not self.__nc_connect():
-                return False #self.__exit()
+            nc_open = self.__nc_connect():
         if ssh and self.ssh is None:
-            if not self.__ssh_connect():
-                return False #self.__exit()
+            ssh_open = self.__ssh_connect():
+        if not (ssh_open or nc_open):
+            return False
         return True
 
     def rpc(self, xmlrpc):
