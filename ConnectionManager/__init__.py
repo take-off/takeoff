@@ -6,6 +6,7 @@ import re
 import logging
 import os, os.path
 import paramiko
+from time import sleep
 from pprint import pprint
 # ncclient
 from ncclient import manager as netconf_ssh
@@ -32,6 +33,7 @@ class connection:
         self.__errors = list()
         self.__results = list()
         self.__netconf_port = 830
+        self.__ssh_channel=None
 
     def __repr__(self):
         ssh_open = True if self.ssh else False
@@ -97,9 +99,28 @@ class connection:
         return True
 
     def __cli_cmd_list(self, cmd_list):
+        if self.debug:
+            self.logger.info("Running list of commands")
         for cmd in cmd_list:
             self.__cli_cmd(cmd)
 
+    def cli_batch(self, cmds):
+        if self.debug:
+            self.logger.info("Invoking shell for multiple commands")
+        try:
+            chan = self.ssh.invoke_shell()
+        except:
+            self.__errors.append("SSH channel initialization failed")
+            return self.__exit()
+        try:
+            chan.send("{}\n".format(cmds))
+            while not chan.recv_ready():
+                sleep(5)
+            self.__results.append(chan.recv(99999))
+        except Exception as e:
+            self.__errors.append("Command set failed")
+            return self.__exit()
+        return self.__exit()
 
 
 
