@@ -1,5 +1,6 @@
 common:
-  - sample_test.FooTest
+  - test_test.SuccessTest
+  - test_test.FailureTest
 juniper: []
 cisco: []
 arista: []
