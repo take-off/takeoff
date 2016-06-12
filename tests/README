@@ -1,4 +1,6 @@
 Put test modules here.
 Add names of test classes to tests.yaml under the correct section
 
-# takeoff_test.py is the base class which is imported into other modules
+NOTE: 
+takeoff_test.py is the base class which is imported into other modules
+
