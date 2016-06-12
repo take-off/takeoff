@@ -3,7 +3,7 @@
 import sys
 import getpass
 from optparse import OptionParser
-from lib.takeoff_core import TakeOffCore
+from lib.takeoff_core_wrapper import TakeOffCore
 
 TEST_DIR = 'tests'
 TEST_LIST_FILE = 'test_list.yaml'
