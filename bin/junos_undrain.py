@@ -1,5 +1,4 @@
-import ConnectionManager
-import yaml
+from takeoff import ConnectionManager
 from getpass import getpass,getuser
 
 
