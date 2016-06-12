@@ -1,6 +1,6 @@
 common:
   - test_test.SuccessTest
-  - test_test.FailureTest
 juniper: []
 cisco: []
-arista: []
+arista:
+  - arista_bgp_conn.AristaBGPConnTest
