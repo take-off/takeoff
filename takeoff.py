@@ -1,93 +1,59 @@
 #!/usr/bin/env python2.7
 
+import sys
 import getpass
 from optparse import OptionParser
-import re
-import sys
-import pdb
-import pprint
-import yaml
+from lib.takeoff_core import TakeOffCore
 
-TEST_LIST_FILE = 'tests/test_list.yaml'
+TEST_DIR = 'tests'
+TEST_LIST_FILE = 'test_list.yaml'
 
-class TakeOffCore(object):
 
-  def __init__(self, hostname, username=None, password=None, platform=None):
-    self.hostname = hostname
-    self.platform = platform
-    self.test_list = self._get_test_list()
-    # Stub for now, replace with connection module later
-    self.connection = None
+def arg_parse(argstr):
+  parser = OptionParser()
+  parser.add_option('-u', '--username', help="Override username")
+  parser.add_option('-t', '--testdir', help="Use alternate test directory")
+  parser.add_option('-p', '--platform', help="Device platform")
+  (options, args) = parser.parse_args(argstr)
 
-  def _get_test_list(self):
-    test_list = []
+  if not options.platform:
+    print "Must specific platform type!"
+    sys.exit(1)
 
-    # Import list from json file
-    try:
-      with open(TEST_LIST_FILE) as f:
-        y = yaml.load(f)
-    except yaml.YAMLError as e:
-      raise Exception("Could not parse YAML file %s: %s" % TEST_LIST_FILE, e)
-
-    # Get common tests
-    if y.get('common'):
-      test_list.extend(y['common'])
-
-    # Then platform
-    if y.get(self.platform):
-      test_list.extend(y[platform])
-
-    return test_list
-
-  def test_runner(self):
-    state = True
-
-    for testclass_name in self.test_list:
-      if not self._run_test(testclass_name):
-        state = False
-
-    return state
-
-  def _run_test(self, testclass_name):
-
-    # testclass_name format is module.path.ClassName
-    elements = testclass_name.split('.')
-    # Classname is last element, rest is path
-    classname = elements.pop()
-
-    # First element
-    testclass_path = elements.pop(0)
-
-    # Then append anything else with dot notation
-    for elem in elements:
-      testclass_path += '.%s' % elem
-
-    print "Running test: %s" % testclass_name
-
-    # pdb.set_trace()
-    # Now load and run test
-    try:
-      exec('from tests.%s import %s'% (testclass_path, classname))
-    except ImportError as e:
-      print "Could not import module %s: %s" % (testclass_name, e)
-
-    exec('test_obj = %s(self.connection, hostname=\'%s\', platform=\'%s\')' % (classname,
-          self.hostname, self.platform))
-
-    # Then run the test, which will return True or False
-    if test_obj.test():
-      print "---- TEST SUCCESS --- "
-      for line in test_obj.output:
-        print line
-    else:
-      print "---- TEST FAILED ----"
-      for line in test_obj.error:
-        print "  %s" % line
+  return options, args
 
 
 def main():
-  # Don't try to log into device for now, just test
-  core = TakeOffCore(hostname='test_hostname', platform='junos')
+
+  options, args = arg_parse(sys.argv[1:])
+
+  if options.username:
+    username = options.username
+  else:
+    username = getpass.getuser()
+
+  if options.platform != 'fake':
+    password = getpass.getpass("Enter device password: ")
+  else:
+    password = 'password'
+
+  if options.testdir:
+    test_dir = options.testdir
+  else:
+    test_dir = TEST_DIR
+
+  test_file = TEST_LIST_FILE
+
+  if not args[0]:
+    print "Must specify filename"
+    sys.exit(1)
+
+  hostname = args[0]
+
+  core = TakeOffCore(hostname=hostname,
+                      username=username, password=password,
+                      platform=options.platform, test_dir=test_dir,
+                      test_file = test_file)
 
   core.test_runner()
 
