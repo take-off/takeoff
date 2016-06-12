@@ -11,8 +11,10 @@ class AristaBGPConnTest(TakeOffTest):
 
   def test(self):
 
-    res = connection_object.cli('show bgp summary')
-
+   # res = connection_object.cli('show bgp summary')
+     with open('BGP.txt','r') as foo:
+      res = foo.read()
+     
     # Program for checking the status of the BGP neighbor from the "show ip bgp summary" command.
     # Note: Enter the correct number of BGP neighbors. Entering more number than acual produces random result.
     #  pfile_r=pfile.read()
