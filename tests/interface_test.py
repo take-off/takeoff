@@ -12,7 +12,8 @@ class InterfaceTest(TakeOffTest):
   def test(self):
 
     res = connection_object.cli('show inter description')
-  def pasre_interfaces(cmd_out, platform):
+  
+  def parse_interfaces(cmd_out, platform):
     interfaceline = cmd_out
     platform =  platform
     down = list()
@@ -28,8 +29,8 @@ class InterfaceTest(TakeOffTest):
     # Then test the interfaces
     self.interface_fun(down, up)
 
-  if len(self.error) == 0:
-    self._handle_success()
+    if len(self.error) == 0:
+      self._handle_success()
 
 
   def interface_fun(down, up):
