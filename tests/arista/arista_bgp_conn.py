@@ -3,12 +3,6 @@ import re
 
 class AristaBGPConnTest(TakeOffTest):
 
-  def __init__(self, connection_object, hostname, platform):
-
-    super(AristaBGPConnTest, self).__init__(connection_object=connection_object,
-                                           hostname=hostname,
-                                          platform=platform)
-
   def test(self):
 
    # res = connection_object.cli('show bgp summary')

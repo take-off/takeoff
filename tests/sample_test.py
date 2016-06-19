@@ -3,7 +3,7 @@ from takeoff_test import TakeOffTest
 Class FooTest(TakeOffTest):
 
   """
-  Elements of Superclass will be:
+  Inherited attributes will be:
   self.status = defaults to False. Set to True before returning method.
   self.output = standard status output that we expect test running to emit.
                 return multiple lines as list.
@@ -17,12 +17,12 @@ Class FooTest(TakeOffTest):
 
   test() method is expected to set self.status to True or False, and return
   the same value.
-  """
-  def __init__(connection_object, hostname, platform):
+  
+  NOTE: If you are adding a custom constructor, it must accept
+  the same named arguments as the superclass and assign them to matching
+  attribute names.
 
-    super(TakeOffTest, self).__init__(connection_object=connection_object,
-                                      hostname=hostname,
-                                      platform=platform)
+  """
 
   def test():
 
