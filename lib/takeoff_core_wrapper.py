@@ -89,7 +89,7 @@ class TakeOffCore(object):
     except ImportError as e:
       print "Could not import module %s: %s" % (testclass_name, e)
 
-    exec('test_obj = %s(self.connection, hostname=\'%s\', platform=\'%s\')' % (classname,
+    exec('test_obj = %s.create(self.connection, hostname=\'%s\', platform=\'%s\')' % (classname,
           self.hostname, self.platform))
 
     # Then run the test, which will return True or False

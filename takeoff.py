@@ -6,7 +6,7 @@ from optparse import OptionParser
 from lib.takeoff_core_wrapper import TakeOffCore
 
 TEST_DIR = 'tests'
-TEST_LIST_FILE = 'test_list.yaml'
+TEST_LIST_FILE = 'manifest.yaml'
 
 
 def arg_parse(argstr):

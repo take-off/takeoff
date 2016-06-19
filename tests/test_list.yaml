@@ -1,7 +1,0 @@
-common:
-  - fake_test.SuccessTest
-juniper: []
-cisco: []
-arista: []
-fake:
-  - arista_bgp_conn.AristaBGPConnTest

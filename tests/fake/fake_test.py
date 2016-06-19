@@ -1,4 +1,4 @@
-from takeoff_test import TakeOffTest
+from ..takeoff_test import TakeOffTest
 
 class SuccessTest(TakeOffTest):
 
@@ -18,12 +18,6 @@ class SuccessTest(TakeOffTest):
   test() method is expected to set self.status to True or False, and return
   the same value.
   """
-  def __init__(self, connection_object, hostname, platform):
-
-    super(SuccessTest, self).__init__(connection_object=connection_object,
-                                      hostname=hostname,
-                                      platform=platform)
-
   def test(self):
 
     # Run arbitrary tests here #
@@ -35,12 +29,6 @@ class SuccessTest(TakeOffTest):
     return self._handle_success(output="Found X interfaces, all up!")
 
 class FailureTest(TakeOffTest):
-
-  def __init__(self, connection_object, hostname, platform):
-
-    super(FailureTest, self).__init__(connection_object=connection_object,
-                                      hostname=hostname,
-                                      platform=platform)
 
   def test(self):
 

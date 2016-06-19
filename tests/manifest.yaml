@@ -1,0 +1,7 @@
+common:
+juniper: []
+cisco: []
+arista: []
+fake:
+  - fake.fake_test.SuccessTest
+  - fake.fake_test.FailureTest

@@ -9,7 +9,7 @@ class TakeOffTest(object):
     self.debug = []
 
   @classmethod
-  def factory(cls, connection_object, hostname, platform):
+  def create(cls, connection_object, hostname, platform):
     obj = cls(connection_object=connection_object,
                 hostname=hostname, platform=platform)
     obj.output = []
