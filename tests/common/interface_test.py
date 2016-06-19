@@ -1,21 +1,16 @@
-from takeoff_test import TakeOffTest
+from ..takeoff_test import TakeOffTest
 
 
 class InterfaceTest(TakeOffTest):
 
-  def __init__(self, connection_object, hostname, platform):
-
-    super(InterfaceTest, self).__init__(connection_object=connection_object,
-                                           hostname=hostname,
-                                          platform=platform)
-
   def test(self):
 
-    res = connection_object.cli('show inter description')
+    res = connection_object.cli('show interface description')
+    self.parse_interfaces(res)
   
-  def parse_interfaces(cmd_out, platform):
+  def parse_interfaces(self, cmd_out):
     interfaceline = cmd_out
-    platform =  platform
+    platform = self.platform
     down = list()
     up = list()      
     interfaceline = cmd_out.splitlines()
