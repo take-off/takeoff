@@ -70,8 +70,8 @@ class connection:
             )
 
     def cli(self,cmd):
-        self.__errors = list()
-        self.__results = list()
+        self.__errors = []
+        self.__results = []
 
         if self.debug: self.logger.debug("cli({})".format(type(cmd)))
         if self.ssh is None:
@@ -81,7 +81,7 @@ class connection:
                 self.__errors.append("Unable to open SSH session")
                 return self.__exit()
         #
-        # send command ..
+        # send command
         #
         if type(cmd) is str:
             self.__cli_cmd(cmd)
