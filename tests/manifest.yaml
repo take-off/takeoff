@@ -1,8 +1,9 @@
-common:
-  - common.interface_test.InterfaceTest
+common: []
 juniper: []
 cisco: []
-arista: []
+arista:
+  - arista.interface_test.InterfaceTest
+  - arista.arista_bgp_conn.AristaBGPConnTest
 fake:
   - fake.fake_test.SuccessTest
   - fake.fake_test.FailureTest

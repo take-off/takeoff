@@ -5,21 +5,14 @@ class AristaBGPConnTest(TakeOffTest):
 
   def test(self):
 
-   # res = connection_object.cli('show bgp summary')
-    with open('BGP.txt','r') as foo:
-      res = foo.read()
+    neighbor_line_re = re.compile('(^\s*\d+\.\d+\.\d+\.\d+).*')
 
-    # Program for checking the status of the BGP neighbor from the "show ip bgp summary" command.
-    # Note: Enter the correct number of BGP neighbors. Entering more number than acual produces random result.
-    #  pfile_r=pfile.read()
-    #  pfile_l=pfile_r.split()
-    #  index_version=pfile_l.index("State/PfxRcd")
-    #  iteration=int(raw_input("Enter the number of neighbours"))
-    neighbor_line_re = re.compile('(^\d+\.\d+\.\d+\.\d+).*')
+    stdin, stdout, stderr = self.conn.exec_command('show ip bgp summary')
 
     neighbor_lines = []
     #for line in res['results'][0].split('\n'):
-    for line in res.split('\n'):
+    for line in stdout.readlines():
+      line.rstrip('\n')
       if neighbor_line_re.match(line):
         neighbor_lines.append(line)
 
@@ -33,7 +26,8 @@ class AristaBGPConnTest(TakeOffTest):
 
     if len(self.error) == 0:
       self._handle_success()
-
+    else:
+      self._handle_failure()
 
   def nei_fun(self, nei_addr, nei_state):
     #print nei, nei_name

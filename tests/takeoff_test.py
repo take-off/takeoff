@@ -1,21 +1,29 @@
 class TakeOffTest(object):
-  def __init__(self, connection_object, hostname, platform):
-    self.connection = connection_object
-    self.hostname = ''
-    self.platform = ''
+  def __init__(self, core):
+    self.core = core
+    # Copy data from core into attributes for easier reference
+    self.conn = core.conn
+    self.hostname = core.hostname
+    self.platform = core.platform
     self.status = False
     self.output = []
     self.error = []
     self.debug = []
 
   @classmethod
-  def create(cls, connection_object, hostname, platform):
-    obj = cls(connection_object=connection_object,
-                hostname=hostname, platform=platform)
+  def create(cls, core):
+    obj = cls(core)
+    obj.state = None
     obj.output = []
     obj.error = []
     obj.debug = []
     return obj
+
+  def get_state(self):
+    return self.state
+
+  def set_state(self, state):
+    self.state = state
 
   def _handle_success(self, output=[]):
     # Output can be single string or list of strings

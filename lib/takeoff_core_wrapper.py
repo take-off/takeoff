@@ -1,7 +1,7 @@
 import sys
-import pdb
+import socket
 import yaml
-import ConnectionManager
+import paramiko
 
 TEST_DIR = 'tests'
 TEST_LIST_FILE = 'test_list.yaml'
@@ -9,8 +9,13 @@ TEST_LIST_FILE = 'test_list.yaml'
 
 class TakeOffCore(object):
 
-  def __init__(self, hostname, username=None, password=None, platform=None,
-                test_dir=TEST_DIR, test_file=TEST_LIST_FILE):
+  def __init__(self, hostname,
+                username=None, 
+                password=None, 
+                platform=None,
+                test_dir=TEST_DIR,
+                test_file=TEST_LIST_FILE,
+                connection=None):
     self.hostname = hostname
     self.platform = platform
     self.username = username
@@ -19,11 +24,34 @@ class TakeOffCore(object):
     self.test_file = test_file
     self.test_list = self._get_test_list()
 
+    # Calling code can create session outside of object
+    # and pass it in, otherwise we'll ssh in here
+    if connection:
+      conn=connection
     if self.platform != 'fake':
-      self.connection = self._get_device_connection()
+      self.conn = self._get_device_connection()
     else:
-      self.connection = None
+      self.conn = None
 
+  def _get_device_connection(self):
+    conn = paramiko.SSHClient()
+    conn.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    try:
+      conn.connect(hostname=self.hostname,
+                    username=self.username,
+                    password=self.password)
+    
+    except paramiko.AuthenticationException:
+      raise Exception("Authentication failed to device %s: %s" %
+                      (hostname, e))
+    except socket.ioerror as e:
+      # would a custom exception work better here?
+      raise Exception("Could not connect to device %s: %s" % 
+                      (hostname, e))
+
+    return conn
+
+  """
   def _get_device_connection(self):
     conn = ConnectionManager.connection(
       target=self.hostname,
@@ -34,6 +62,7 @@ class TakeOffCore(object):
       raise Exception("Could not log into %s, check connectivity and credentials." % self.hostname)
 
     return conn
+  """
 
   def _get_test_list(self):
     test_list = []
@@ -82,19 +111,19 @@ class TakeOffCore(object):
 
     print "Running test: %s" % testclass_name
 
-    # pdb.set_trace()
     # Now load and run test
     try:
       exec('from tests.%s import %s'% (testclass_path, classname))
     except ImportError as e:
       print "Could not import module %s: %s" % (testclass_name, e)
 
-    exec('test_obj = %s.create(self.connection, hostname=\'%s\', platform=\'%s\')' % (classname,
-          self.hostname, self.platform))
+    exec('test_obj = %s.create(self)' % classname)
 
-    # Then run the test, which will return True or False
+    # Then run the test, which will set self.status to true or false
 
-    if test_obj.test():
+    test_obj.test()
+
+    if test_obj.status == True:
       print "---- TEST SUCCESS --- "
       for line in test_obj.output:
         print line
